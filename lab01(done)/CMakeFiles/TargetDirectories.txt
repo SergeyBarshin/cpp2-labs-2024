@@ -1,0 +1,9 @@
+/Users/sergey/Documents/BMSTU/2 sem/ПКШ/labs/lab01/CMakeFiles/lab01.dir
+/Users/sergey/Documents/BMSTU/2 sem/ПКШ/labs/lab01/CMakeFiles/edit_cache.dir
+/Users/sergey/Documents/BMSTU/2 sem/ПКШ/labs/lab01/CMakeFiles/rebuild_cache.dir
+/Users/sergey/Documents/BMSTU/2 sem/ПКШ/labs/lab01/mymath/CMakeFiles/mymath.dir
+/Users/sergey/Documents/BMSTU/2 sem/ПКШ/labs/lab01/mymath/CMakeFiles/edit_cache.dir
+/Users/sergey/Documents/BMSTU/2 sem/ПКШ/labs/lab01/mymath/CMakeFiles/rebuild_cache.dir
+/Users/sergey/Documents/BMSTU/2 sem/ПКШ/labs/lab01/secLib/CMakeFiles/secLib.dir
+/Users/sergey/Documents/BMSTU/2 sem/ПКШ/labs/lab01/secLib/CMakeFiles/edit_cache.dir
+/Users/sergey/Documents/BMSTU/2 sem/ПКШ/labs/lab01/secLib/CMakeFiles/rebuild_cache.dir
