@@ -77,6 +77,7 @@ namespace planet {
     std::istream & operator >> (std::istream &in,  Planet& planet){
         char tmp[40];
         in >> tmp;
+        delete[] planet.name;
         planet.name = new char[strlen(tmp)+1];
         std::strcpy(planet.name, tmp);
 
@@ -110,7 +111,7 @@ namespace planet {
 
     // опертор присваивания
     // конструктор копирования
-    int getPlanet(Planet* arr, int& curSize, const char* targetName)
+    int Planet::getPlanet(Planet* arr, int& curSize, const char* targetName)
     {
         for (int i = 0; i < curSize; i++){
             if (strcmp(arr[i].getName(), targetName) == 0){
@@ -120,8 +121,8 @@ namespace planet {
         return -1;
     }
 
-    void addObjToDB(Planet* arr, int maxSize, int& curSize, const char* name, int diamiter, int life, int satelites){
-        if (curSize >= maxSize || getPlanet(arr, curSize, name) != -1){
+    void Planet::addObjToDB(Planet* arr, int maxSize, int& curSize, const char* name, int diamiter, int life, int satelites){
+        if (curSize >= maxSize || Planet::getPlanet(arr, curSize, name) != -1){
             std::cout << "База данных заполенена или такая планета уже существует\n";
             return;
         }
@@ -129,7 +130,7 @@ namespace planet {
         curSize += 1;
     }
 
-    void printDb(Planet* arr, int n){
+    void Planet::printDb(Planet* arr, int n){
         std::cout << "   Название    | Диаметр | Жизнь | Спутники |\n";
         std::cout << "---------------|---------|-------|----------|\n";
         for(int i = 0; i < n; i++){
@@ -141,8 +142,8 @@ namespace planet {
     }
 
 
-    void updateDb(Planet* arr, int& curSize, const char* targetName, const char* name = "", int diamiter = -1, int life = -1, int satelites = -1){
-        int targetId = getPlanet(arr, curSize, targetName);
+    void Planet::updateDb(Planet* arr, int& curSize, const char* targetName, const char* name = "", int diamiter = -1, int life = -1, int satelites = -1){
+        int targetId = Planet::getPlanet(arr, curSize, targetName);
         if (targetId == -1){
             std::cout << "Планета не найдена\n";
             return;
@@ -155,8 +156,8 @@ namespace planet {
     }
 
 
-    void deleteByName(Planet* arr, int& curSize, const char* targetName){
-        int targetId = getPlanet(arr, curSize, targetName);
+    void Planet::deleteByName(Planet* arr, int& curSize, const char* targetName){
+        int targetId = Planet::getPlanet(arr, curSize, targetName);
         if (targetId == -1){
             std::cout << "Планета не найдена!\n";
             return;
@@ -168,7 +169,7 @@ namespace planet {
     }
 
 
-    void sortByName(Planet* arr, int curSize){
+    void Planet::sortByName(Planet* arr, int curSize){
         for (int i = 0; i < curSize; i++){
             for (int j = i + 1; j < curSize; j++){
                 if (arr[i] > arr[j])
@@ -179,7 +180,7 @@ namespace planet {
     }
 
 
-    int readDbFromFile(const char *filename, Planet *arr, int &n) {
+    int Planet::readDbFromFile(const char *filename, Planet *arr, int &n) {
         std::ifstream fin(filename, std::ios::in);
         if (!fin) {
             std::cout << "Heт файла " << filename << std::endl;
@@ -200,7 +201,7 @@ namespace planet {
     }
 
 
-    void writeDbToFile(const char *filename, Planet* arr, int n){
+    void Planet::writeDbToFile(const char *filename, Planet* arr, int n){
         std::ofstream fout;
         fout.open(filename, std::ios::binary);
 

@@ -3,7 +3,6 @@
 #include "Planet/Planet.hpp"
 #include "Form/Form.hpp"
 
-using namespace planet;
 
 int menu() {
     std::cout << " ============== ГЛАВНОЕ МЕНЮ ========================\n";
@@ -24,60 +23,60 @@ int main() {
     int curDbSize = 0;
     Planet* planetsArray = new Planet[maxDbSize];
     std::cout << "----------Считано из файла----------\n";
-    readDbFromFile("sourcePlanet.txt", planetsArray, curDbSize);
-    printDb(planetsArray, curDbSize);
+    Planet::readDbFromFile("sourcePlanet.txt", planetsArray, curDbSize);
+    Planet::printDb(planetsArray, curDbSize);
 
     std::cout << "----------Добавили венеру----------\n";
-    addObjToDB(planetsArray, maxDbSize, curDbSize, "Venus", 12103, 0, 0);
-    printDb(planetsArray, curDbSize);
+    Planet::addObjToDB(planetsArray, maxDbSize, curDbSize, "Venus", 12103, 0, 0);
+    Planet::printDb(planetsArray, curDbSize);
 
     std::cout << "----------Удалили землю----------\n";
-    deleteByName(planetsArray, curDbSize, "Earth");
-    printDb(planetsArray, curDbSize);
+    Planet::deleteByName(planetsArray, curDbSize, "Earth");
+    Planet::printDb(planetsArray, curDbSize);
 
     std::cout << "----------Добавили землю 2----------\n";
-    addObjToDB(planetsArray, maxDbSize, curDbSize,"Earth2", 12742*2, 1, 1*2);
-    printDb(planetsArray, curDbSize);
+    Planet::addObjToDB(planetsArray, maxDbSize, curDbSize,"Earth2", 12742*2, 1, 1*2);
+    Planet::printDb(planetsArray, curDbSize);
 
     std::cout << "----------Отредактировали марс----------\n";
-    updateDb(planetsArray, curDbSize, "Mars", "Mars_updated", 10, 1, -1);
-    printDb(planetsArray, curDbSize);
+    Planet::updateDb(planetsArray, curDbSize, "Mars", "Mars_updated", 10, 1, -1);
+    Planet::printDb(planetsArray, curDbSize);
 
     std::cout << "----------Отсортировали БД----------\n";
-    sortByName(planetsArray, curDbSize);
-    printDb(planetsArray, curDbSize);
+    Planet::sortByName(planetsArray, curDbSize);
+    Planet::printDb(planetsArray, curDbSize);
     
 
-    writeDbToFile("resultPlanet.txt", planetsArray, curDbSize);
+    Planet::writeDbToFile("resultPlanet.txt", planetsArray, curDbSize);
     
     std::cout << "\n\nИнтерактивное взаимодействие с классом 'анкета для опроса населения'\n\n";
 
     const int maxDbSizeForm = 100;
     int curDbSizeForm = 0;
-    form::Form* formArray = new form::Form[maxDbSize];
+    Form* formArray = new Form[maxDbSize];
 
     while (true) {
         switch (menu()) {
             case 1: 
-                form::readDbFromFile("sourceForm.txt", formArray, curDbSizeForm);
+                Form::readDbFromFile("sourceForm.txt", formArray, curDbSizeForm);
                 break; 
             case 2: 
-                form::writeDbToFile("resultForm.txt", formArray, curDbSizeForm);
+                Form::writeDbToFile("resultForm.txt", formArray, curDbSizeForm);
                 break;
             case 3:
-                form::sortByName(formArray, curDbSizeForm);
+                Form::sortByName(formArray, curDbSizeForm);
                 break;
             case 4:
-                form::addObjToDB(formArray, maxDbSizeForm, curDbSizeForm);
+                Form::addObjToDB(formArray, maxDbSizeForm, curDbSizeForm);
                 break; 
             case 5:
-                form::deleteByName(formArray, curDbSizeForm);;
+                Form::deleteByName(formArray, curDbSizeForm);;
                 break;
             case 6:
-                form::updateDb(formArray, curDbSizeForm);
+                Form::updateDb(formArray, curDbSizeForm);
                 break;
             case 7:
-                form::printDb(formArray, curDbSizeForm);
+                Form::printDb(formArray, curDbSizeForm);
                 break;
             case 8:
                 return 0;
@@ -86,6 +85,9 @@ int main() {
                 break;
         }
     }
+
+    delete[] formArray;
+    delete[] planetsArray;
 
     return 0;
 }
