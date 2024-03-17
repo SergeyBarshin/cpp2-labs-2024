@@ -16,7 +16,6 @@ class MyVector {
         if (size >= maxSize || size <= maxSize / 2) {
             T *newArr = new T[newSize];
             for (int i = 0; i < size; ++i) {
-                newArr[i] = new T(strlen(pdata[i] + 1));
                 newArr[i] = pdata[i];
             }
             delete[] pdata;
@@ -26,22 +25,26 @@ class MyVector {
     };
 
    public:
-    MyVector(const T el = NULL, int max_size = MAX_SIZE) {
-        size = 1;
+    MyVector(T el = 0, int max_size = MAX_SIZE) {
         maxSize = MAX_SIZE;
         pdata = new T[maxSize];
-        pdata[0] = el;
+        if (!el) {
+            size = 0;
+        } else {
+            pdata[0] = el;
+            size = 1;
+        }
     };
 
-    /* MyVector(const T el, int max_size = MAX_SIZE) {
-         size = 1;
-         maxSize = MAX_SIZE;
-         pdata = new T *[maxSize];
-         pdata[0] = el;
-         // strcpy(pdata[0], el);
-     };*/
+    /*  MyVector(const T el, int max_size = MAX_SIZE) {
+          size = 1;
+          maxSize = MAX_SIZE;
+          pdata = new T *[maxSize];
+          pdata[0] = el;
+          // strcpy(pdata[0], el);
+      };*/
 
-    MyVector(MyVector &v) {
+    MyVector(const MyVector &v) {
         // size = 0;
         maxSize = MAX_SIZE;
         pdata = new T[MAX_SIZE];
@@ -52,7 +55,7 @@ class MyVector {
 
     ~MyVector() { delete[] pdata; };
 
-    void addElement(const char *el) {
+    void addElement(const T el) {
         pdata[size] = el;
         size++;
         resize(maxSize * 2);
@@ -71,10 +74,10 @@ class MyVector {
         return false;
     };
 
-    char *operator[](int i) const {
+    T operator[](int i) const {
         if (i >= size) {
             std::cerr << "Выход за пределы границ вектора\n";
-            return nullptr;
+            return 0;
         } else {
             return pdata[i];
         }
@@ -82,11 +85,11 @@ class MyVector {
     // функции для алгоритмы бысторой сортировки
 
     int partition(T *arr, int low, int high) {
-        char *pivot = arr[high];
+        T pivot = arr[high];
         int i = low - 1;
 
         for (int j = low; j < high; j++) {
-            if (strcmp(arr[j], pivot) < 0) {
+            if (arr[j] < pivot) {
                 i++;
                 std::swap(arr[i], arr[j]);
             }
@@ -106,15 +109,32 @@ class MyVector {
     }
 
     void sort() { quickSort(pdata, 0, size - 1); };
+    // конец сортировки
 
     int getSize() const { return size; }
     int getMaxSize() const { return maxSize; }
 
-    int find(const char *el) const {
+    int find(T el) const {
         for (int i = 0; i < size; ++i) {
             if (pdata[i] == el) {
                 return i;
             }
+        }
+        return -1;
+    }
+    int binarySearch(T *arr, int l, int r, int x) const {
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+
+            // Check if x is present at mid
+            if (arr[m] == x) return m;
+
+            // If x greater, ignore left half
+            if (arr[m] < x) l = m + 1;
+
+            // If x is smaller, ignore right half
+            else
+                r = m - 1;
         }
         return -1;
     }
@@ -141,7 +161,7 @@ class MyVector {
     };
 };
 
-/* --------------------------------------------------------
+/* --------------------------------------------------------*/
 // специализация шаблона под char*
 template <>
 class MyVector<char *> {
@@ -168,18 +188,27 @@ class MyVector<char *> {
         size = 1;
         maxSize = MAX_SIZE;
         pdata = new char *[maxSize];
-        pdata[0] = new char[1];
+        if (!el) {
+            pdata[0] = new char[1];
+        } else {
+            pdata[0] = new char[strlen(el) + 1];
+            strcpy(pdata[0], el);
+        }
     };
 
     MyVector(const char *el, int max_size = MAX_SIZE) {
         size = 1;
         maxSize = MAX_SIZE;
         pdata = new char *[maxSize];
-        pdata[0] = new char[strlen(el) + 1];
-        strcpy(pdata[0], el);
+        if (!el) {
+            pdata[0] = new char[1];
+        } else {
+            pdata[0] = new char[strlen(el) + 1];
+            strcpy(pdata[0], el);
+        }
     };
 
-    MyVector(MyVector &v) {
+    MyVector(const MyVector &v) {
         // size = 0;
         maxSize = MAX_SIZE;
         pdata = new char *[MAX_SIZE];
@@ -268,6 +297,20 @@ class MyVector<char *> {
         return -1;
     }
 
+    int binarySearch(char **arr, int l, int r, const char *x) const {
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (strcmp(arr[m], x) == 0) return m;
+
+            if (strcmp(arr[m], x) < 0)
+                l = m + 1;
+
+            else
+                r = m - 1;
+        }
+        return -1;
+    }
+
     MyVector &operator=(const MyVector &v) {
         this->maxSize = v.getMaxSize();
         this->size = v.getSize();
@@ -290,5 +333,5 @@ class MyVector<char *> {
         return out;
     };
 };
-*/
+
 #endif  // INHERITANCE_MYVECTOR_H
