@@ -80,10 +80,10 @@ class MyVector {
         return false;
     };
 
-    T operator[](int i) const {
+    T &operator[](int i) const {
         if (i >= size) {
             std::cerr << "Выход за пределы границ вектора\n";
-            return 0;
+            return pdata[size];  // если вышли за пределы, то возвращаем последний элемент
         } else {
             return pdata[i];
         }
@@ -202,10 +202,10 @@ inline int MyVector<char *>::partition(char **arr, int low, int high) {
     return i + 1;
 }
 
-template <>
+template <> /**/
 inline MyVector<char *>::MyVector(const MyVector &v) {
     maxSize = MAX_SIZE;
-    pdata = new char *[MAX_SIZE];
+    pdata = new char *[maxSize];
     for (int i = 0; i < v.getSize(); ++i) {
         addElement(v.pdata[i]);
     }
@@ -220,10 +220,11 @@ inline MyVector<char *>::~MyVector() {
 };
 
 template <>
-inline bool MyVector<char *>::deleteElement(int i) {
+inline bool MyVector<char *>::deleteElement(int i) {  // копирование строк и указателей что-то не то
     if (i < size) {
         for (int j = i + 1; j < size; ++j) {
-            strcpy(pdata[j - 1], pdata[j]);
+            // strcpy(pdata[j - 1], pdata[j]);
+            pdata[j - 1] = pdata[j];
         }
         --size;
         resize(maxSize / 2);
@@ -260,13 +261,13 @@ inline int MyVector<char *>::binarySearch(char **arr, int l, int r, char *x) con
 
 template <>
 inline MyVector<char *> &MyVector<char *>::operator=(const MyVector &v) {
-    this->maxSize = v.getMaxSize();
-    this->size = v.getSize();
+    this->maxSize = v.maxSize;
+    this->size = v.size;
 
     char **newArr = new char *[maxSize];
 
     for (int i = 0; i < size; ++i) {
-        newArr[i] = new char(strlen(v[i] + 1));
+        newArr[i] = new char[strlen(v[i]) + 1];
         strcpy(newArr[i], v[i]);
     }
     this->pdata = newArr;

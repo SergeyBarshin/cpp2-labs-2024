@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "MyStl/MySet.hpp"
 #include "MyStl/MyVector.hpp"
@@ -62,13 +63,13 @@ int main() {
         std::cout << "Множество s1!=s, se3\n";
 
     // Пример работы со скалярами
-    MySet<int> set1, set2;
-    set1.AddElement(1);
-    set1.AddElement(3);
-    set1.AddElement(5);
+    MySet<std::string> set1, set2;
+    set1.AddElement("1");
+    set1.AddElement("3");
+    set1.AddElement("5");
 
-    set2.AddElement(2);
-    set2.AddElement(4);
+    set2.AddElement("2");
+    set2.AddElement("4");
     std::cout << set1 << '\n';
     std::cout << set2 << '\n';
 
