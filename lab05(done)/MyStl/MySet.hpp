@@ -35,14 +35,14 @@ class MySet : public MyVector<T> {
 
     MySet &operator-=(const MySet &s) {
         for (int i = 0; i < s.getSize(); ++i) {
-            if (this->isElement(s[i])) this->DeleteElement(s[i]);
+            if (this->isElement(s[i])) this->deleteElement(s[i]);
         }
         return *this;
     }
 
     MySet &operator*=(const MySet &s) {
         for (int i = 0; i < s.getSize(); ++i) {
-            if (!this->isElement(s[i])) this->DeleteElement(s[i]);
+            if (!this->isElement(s[i])) this->deleteElement(s[i]);
         }
         return *this;
     }
@@ -54,10 +54,10 @@ class MySet : public MyVector<T> {
         }
     }
 
-    void DeleteElement(T el) {
+    void deleteElement(T el) {
         int index;
         if (!(index = q_find(el))) {
-            this->deleteElement(index);
+            MyVector<T>::deleteElement(index);
         }
     }
 

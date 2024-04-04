@@ -224,7 +224,6 @@ void states() {
         dict[states[i]] = pops[i];
     }
     printMap(dict);
-    // for (auto it = dict.begin(); it != dict.end(); ++it) cout << it->first << '-' << it->second << '\n';
 
     cout << '\n';
     string tmp;
@@ -237,20 +236,29 @@ void states() {
 
 int main() {
     /*--строки--*/
-    // countSentences();  // 1
-    // deleteSpaces();  // 2
-    // readFromFileAndWrite();  // 3
+    std::cout << "\t Задание № 1 \n";
+    countSentences();  // 1
+    std::cout << "\t Задание № 2 \n";
+    deleteSpaces();  // 2
+    std::cout << "\t Задание № 3 \n";
+    readFromFileAndWrite();  // 3
 
     /*--векторы--*/
-    // manupulateVector();  // 4
-    // vectorPoints();  // 5(класс)
+    std::cout << "\t Задание № 4 \n";
+    manupulateVector();  // 4
+    std::cout << "\t Задание № 5 \n";
+    vectorPoints();  // 5(класс)
 
     /*--св списки--*/
-    // manupulateList();  // 6
-    // planetList();  //  7 (класс)
+    std::cout << "\t Задание № 6 \n";
+    manupulateList();  // 6
+    std::cout << "\t Задание № 7 \n";
+    planetList();  //  7 (класс)
 
     /*--map--*/
-    // manupMap();  // 8
+    std::cout << "\t Задание № 8 \n";
+    manupMap();  // 8
+    std::cout << "\t Задание № 9 \n";
     states();  // 9
     return 0;
 }

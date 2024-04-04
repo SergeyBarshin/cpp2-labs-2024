@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "MyVector.hpp"
+#include "../MyVector/MyVector.hpp"
 // #include "Term.hpp"
 class Polynomial;
 
@@ -34,18 +34,23 @@ class Polynomial {
 
    public:
     Polynomial() = default;
-    Polynomial(int coef);
+    //    Polynomial(int coef);
     Polynomial(int coef, int exp);
+    Polynomial(const Polynomial& pl);
 
     Polynomial& operator+=(const Term& tr);
+    Polynomial& operator+=(const Polynomial& pl);
+
+    friend Polynomial operator+(const Polynomial& pl1, const Term& tr);
     friend Polynomial operator+(const Polynomial& pl1, const Polynomial& pl2);
+
+    Polynomial& operator*=(const Term& tr);
+    Polynomial& operator*=(const Polynomial& tr);
+    friend Polynomial operator*(const Polynomial& pl1, const Term& pl2);
+    friend Polynomial operator*(const Polynomial& pl1, const Polynomial& pl2);
 
     friend std::ostream& operator<<(std::ostream& out, const Polynomial& pl);
     friend std::istream& operator>>(std::istream& in, Polynomial& pl);
-
-    // оператор += сортировка при добавлении, а не редактированнии
-
-    // оператор >>
 };
 
 #endif

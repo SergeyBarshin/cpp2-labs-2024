@@ -24,20 +24,24 @@ std::pair<int, int> parceStrToTerm(char* str) {
         }
     }
 
-    bool isDigitBeforex = pos_x != -1 ? isdigit(str[pos_x - 1]) : true;
+    // выше мы определяем на наличие x и числа в степени
 
+    bool isDigitBeforex = pos_x != -1 ? isdigit(str[pos_x - 1]) : true;
+    // std::cout << isDigitBeforex << '\n';
     int coef = 1, power = 0;
     if (isDigitBeforex) {
         sscanf(str, "%dx^%d", &coef, &power);
     } else {
-        char* pos_power = strchr(str, '^');
-        sscanf(pos_power + 1, "%d", &power);
+        if (pow) {
+            char* pos_power = strchr(str, '^');
+            sscanf(pos_power + 1, "%d", &power);
+        }
     }
 
     if (!pow) power = 1;
     if (!x) power = 0;
     if (coef == 1 && str[0] == '-') coef = -coef;
-
+    // std::cout << coef << ' ' << power << '\n';
     return {coef, power};
 }
 
@@ -83,26 +87,33 @@ std::istream& operator>>(std::istream& in, Term& fr) {
     char str[50];
     std::cin.getline(str, 50);
     removeSpaces(str);
-
     auto [coef, power] = parceStrToTerm(str);
+    if (coef != 0) {
+        fr._coef = coef;
+        fr._exp = power;
+    } else {
+        fr._coef = 0;
+        fr._exp = 0;
+    }
 
-    fr._coef = coef;
-    fr._exp = power;
     return in;
 }
 
-Polynomial::Polynomial(int coef) {
+/*Polynomial::Polynomial(int coef) {
     Term tr(coef);
     _poly.addElement(tr);
-}
+}*/
 
 Polynomial::Polynomial(int coef, int exp) {
     Term tr(coef, exp);
     _poly.addElement(tr);
 }
 
+Polynomial::Polynomial(const Polynomial& pl) { _poly = pl._poly; }
+
 Polynomial& Polynomial::operator+=(const Term& tr) {
     // находим полином нашей стерени и прибовляем к нему, получем newPl
+    if (tr._exp == 0 && tr._coef == 0) return *this;
     for (int i = 0; i < _poly.getSize(); ++i) {
         if (_poly[i].getExp() == tr.getExp()) {
             _poly[i] = _poly[i] + tr;
@@ -115,10 +126,55 @@ Polynomial& Polynomial::operator+=(const Term& tr) {
     return *this;
 }
 
+Polynomial& Polynomial::operator+=(const Polynomial& pl) {
+    // идем по каждому элементу pl и +=
+    for (int i = 0; i < pl._poly.getSize(); ++i) {
+        *this += pl._poly[i];
+    }
+    return *this;
+}
+
+Polynomial operator+(const Polynomial& pl1, const Term& tr) {
+    Polynomial temp(pl1);
+    temp += tr;
+    return temp;
+}
+
 Polynomial operator+(const Polynomial& pl1, const Polynomial& pl2) {
     Polynomial temp(pl1);
     for (int i = 0; i < pl2._poly.getSize(); ++i) {
         temp += pl2._poly[i];
+    }
+    return temp;
+}
+
+Polynomial& Polynomial::operator*=(const Term& tr) {
+    // проходим по каждому элементу и умножаем коэфы, кладываем степени
+    for (int i = 0; i < _poly.getSize(); ++i) {
+        _poly[i]._coef *= tr._coef;
+        _poly[i]._exp += tr._exp;
+    }
+    return *this;
+}
+
+Polynomial& Polynomial::operator*=(const Polynomial& pl) {
+    // идем по каждому элементу pl и +=
+    for (int i = 0; i < pl._poly.getSize(); ++i) {
+        *this *= pl._poly[i];
+    }
+    return *this;
+}
+
+Polynomial operator*(const Polynomial& pl1, const Term& tr) {
+    Polynomial temp(pl1);
+    temp *= tr;
+    return temp;
+}
+
+Polynomial operator*(const Polynomial& pl1, const Polynomial& pl2) {
+    Polynomial temp(pl1);
+    for (int i = 0; i < pl2._poly.getSize(); ++i) {
+        temp *= pl2._poly[i];
     }
     return temp;
 }
@@ -158,7 +214,6 @@ std::istream& operator>>(std::istream& in, Polynomial& pl) {
     }
 
     // делим подстроку на токены, определяем номер токена, записываем к нему знак
-    // и потоком ввода вызываем ввод в Term
     const char* delim = "+-";
     char* token = strtok(str, delim);
     int simbIndex = 0;
@@ -169,9 +224,8 @@ std::istream& operator>>(std::istream& in, Polynomial& pl) {
 
         strcat(tmpStr, token);
         auto [coef, power] = parceStrToTerm(tmpStr);
-        // std::cout << coef << ' ' << power << '\n';
+        if (coef == 0) power = 0;
         Term tmp(coef, power);
-
         token = strtok(NULL, delim);
         simbIndex += 1;
         pl += tmp;
