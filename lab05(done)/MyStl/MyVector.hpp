@@ -150,6 +150,7 @@ class MyVector {
         for (int i = 0; i < size; ++i) {
             newArr[i] = v[i];
         }
+        delete[] this->pdata;
         this->pdata = newArr;
 
         return *this;
